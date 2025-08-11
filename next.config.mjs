@@ -5,6 +5,9 @@ const nextConfig = {
     optimizePackageImports: ['react-icons', 'framer-motion'],
   },
   
+  // Netlify compatibility
+  trailingSlash: false,
+  
   // Image optimization
   images: {
     domains: ['localhost', '127.0.0.1'],
