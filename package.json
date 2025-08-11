@@ -10,7 +10,7 @@
     "start": "next start",
     "start:local": "next start -p 3000 -H localhost",
     "lint": "next lint",
-    "postinstall": "prisma generate && node node_modules/next/dist/lib/swc/install.js",
+    "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:seed": "node prisma/seed.js",
     "db:reset": "prisma db push && node prisma/seed.js",
