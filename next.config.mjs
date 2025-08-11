@@ -1,9 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Skip trailing slash redirect (moved to root level for Next.js 15)
+  skipTrailingSlashRedirect: true,
+  
   // Enable experimental features
   experimental: {
     optimizePackageImports: ['react-icons', 'framer-motion'],
-    skipTrailingSlashRedirect: true,
   },
   
   // Netlify compatibility
