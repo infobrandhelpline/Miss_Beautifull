@@ -1,0 +1,223 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model for customers and staff
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  phone     String?
+  role      UserRole @default(CUSTOMER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  bookings        Booking[]
+  blogPosts       BlogPost[]
+  comments        Comment[]
+  reviews         Review[]
+  stylistBookings Booking[] @relation("StylistBookings")
+  enrollments     Enrollment[]
+
+  @@map("users")
+}
+
+// Service categories and individual services
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  price       Float
+  duration    Int      // in minutes
+  category    String
+  isActive    Boolean  @default(true)
+  imageUrl    String?  // URL for the service image
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  bookings Booking[]
+
+  @@map("services")
+}
+
+// Blog posts
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  excerpt   String
+  content   String
+  category  String
+  authorId  String
+  imageUrl  String?  // URL for the blog post image
+  isPublished Boolean @default(false)
+  featured  Boolean  @default(false)
+  views     Int      @default(0)
+  likes     Int      @default(0)
+  readTime  Int      // in minutes
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+  tags      Tag[]
+
+  @@map("blog_posts")
+}
+
+// Blog post tags
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+
+  // Relations
+  blogPosts BlogPost[]
+
+  @@map("tags")
+}
+
+// Comments on blog posts
+model Comment {
+  id         String   @id @default(cuid())
+  content    String
+  authorId   String
+  blogPostId String
+  isApproved Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  author   User     @relation(fields: [authorId], references: [id])
+  blogPost BlogPost @relation(fields: [blogPostId], references: [id])
+
+  @@map("comments")
+}
+
+// Booking system
+model Booking {
+  id          String        @id @default(cuid())
+  userId      String
+  serviceId   String
+  stylistId   String?
+  date        DateTime
+  time        String
+  status      BookingStatus @default(PENDING)
+  notes       String?
+  totalPrice  Float
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+  stylist User?   @relation("StylistBookings", fields: [stylistId], references: [id])
+  review  Review?
+
+  @@map("bookings")
+}
+
+// Reviews and ratings
+model Review {
+  id        String   @id @default(cuid())
+  userId    String
+  bookingId String   @unique
+  rating    Int      // 1-5 stars
+  comment   String?
+  isApproved Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id])
+  booking Booking @relation(fields: [bookingId], references: [id])
+
+  @@map("reviews")
+}
+
+// Academy courses
+model Course {
+  id          String   @id @default(cuid())
+  name        String
+  description String
+  duration    String   // e.g., "3 months"
+  price       Float
+  level       String   // Beginner, Intermediate, Advanced
+  maxStudents Int
+  currentStudents Int   @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  enrollments Enrollment[]
+
+  @@map("courses")
+}
+
+// Course enrollments
+model Enrollment {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  status    EnrollmentStatus @default(ENROLLED)
+  enrolledAt DateTime @default(now())
+  completedAt DateTime?
+
+  // Relations
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
+
+  @@unique([userId, courseId])
+  @@map("enrollments")
+}
+
+// Contact form submissions
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@map("contacts")
+}
+
+// Enums
+enum UserRole {
+  ADMIN
+  STAFF
+  STYLIST
+  CUSTOMER
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum EnrollmentStatus {
+  ENROLLED
+  IN_PROGRESS
+  COMPLETED
+  DROPPED
+}
