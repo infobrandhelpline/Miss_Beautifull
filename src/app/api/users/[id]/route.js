@@ -1,13 +1,25 @@
 import { NextResponse } from 'next/server';
 import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
+// Force dynamic runtime to avoid build-time execution
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
+// Lazy load Prisma to avoid build-time connection
+let prisma;
+function getPrisma() {
+  if (!prisma) {
+    prisma = new PrismaClient();
+  }
+  return prisma;
+}
 
 // GET single user by ID
 export async function GET(request, { params }) {
   try {
     const { id } = params;
-    const user = await prisma.user.findUnique({
+    const db = getPrisma();
+    const user = await db.user.findUnique({
       where: { id }
     });
 
@@ -35,7 +47,8 @@ export async function PUT(request, { params }) {
     const body = await request.json();
     const { name, email, phone, role } = body;
 
-    const user = await prisma.user.update({
+    const db = getPrisma();
+    const user = await db.user.update({
       where: { id },
       data: {
         name,
@@ -59,7 +72,8 @@ export async function PUT(request, { params }) {
 export async function DELETE(request, { params }) {
   try {
     const { id } = params;
-    await prisma.user.delete({
+    const db = getPrisma();
+    await db.user.delete({
       where: { id }
     });
 

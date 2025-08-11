@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
+// Force dynamic runtime to avoid build-time execution
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 // GET single booking by ID
 export async function GET(request, { params }) {
   try {

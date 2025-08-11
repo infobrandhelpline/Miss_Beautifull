@@ -4,11 +4,9 @@
 
 [build.environment]
   NODE_VERSION = "18"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  NODE_ENV = "production"
+  SKIP_DATABASE_CONNECTION = "true"
+  DISABLE_API_ROUTES = "true"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

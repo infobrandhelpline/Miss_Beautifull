@@ -3,6 +3,7 @@ const nextConfig = {
   // Enable experimental features
   experimental: {
     optimizePackageImports: ['react-icons', 'framer-motion'],
+    skipTrailingSlashRedirect: true,
   },
   
   // Netlify compatibility
@@ -52,49 +53,12 @@ const nextConfig = {
       };
     }
     
+
+    
     return config;
   },
   
-  // Headers for security
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-        ],
-      },
-    ];
-  },
-  
-  // Development server configuration
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: '/api/:path*',
-      },
-    ];
-  },
+
 };
 
 export default nextConfig;

@@ -23,7 +23,6 @@ import {
   FaSmile,
   FaLeaf,
   FaUser,
-  FaStar as FaBeauty,
   FaScissors,
   FaPaintBrush,
   FaSprayCan,
@@ -36,15 +35,7 @@ import {
   FaHandHoldingMedical,
   FaHandHoldingDroplet,
   FaHandHoldingSparkles,
-  FaHandHoldingGift,
-  FaHandHoldingHeart as FaFacial,
-  FaHandHoldingWater as FaHydra,
-  FaHandHoldingMagic as FaAntiAging,
-  FaHandHoldingSeedling as FaSkinTreatment,
-  FaHandHoldingMedical as FaThreading,
-  FaHandHoldingDroplet as FaWaxing,
-  FaHandHoldingSparkles as FaNailArt,
-  FaHandHoldingGift as FaBridalPackage
+  FaHandHoldingGift
 } from 'react-icons/fa';
 
 export default function ServiceCard({ service, index }) {
@@ -115,17 +106,17 @@ export default function ServiceCard({ service, index }) {
       'Blush': FaHandHoldingHeart,
       
       // Nail Services - Unique icons for each
-      'Nail Art': FaNailArt,
+      'Nail Art': FaHandHoldingSparkles,
       'Manicure': FaGem,
       'Pedicure': FaGem,
       'Nail Polish': FaHandHoldingSparkles,
       'Nail Extension': FaHandHoldingGift,
       
       // Skincare Services - Unique icons for each
-      'Facial': FaFacial,
-      'Skin Treatment': FaSkinTreatment,
-      'Anti-Aging': FaAntiAging,
-      'Hydra Facial': FaHydra,
+      'Facial': FaHandHoldingHeart,
+      'Skin Treatment': FaHandHoldingSeedling,
+      'Anti-Aging': FaHandHoldingMagic,
+      'Hydra Facial': FaHandHoldingWater,
       'Fruit Facial': FaHandHoldingSeedling,
       'Gold Facial': FaCrown,
       'Diamond Facial': FaGem,
@@ -134,13 +125,13 @@ export default function ServiceCard({ service, index }) {
       // Body & Spa Services - Unique icons for each
       'Body Massage': FaSpa,
       'Spa Treatment': FaHandHoldingWater,
-      'Waxing': FaWaxing,
-      'Threading': FaThreading,
+      'Waxing': FaHandHoldingDroplet,
+      'Threading': FaHandHoldingMedical,
       'Body Scrub': FaHandHoldingSeedling,
       'Hot Stone Massage': FaHandHoldingHeart,
       
       // Bridal Packages - Unique icons for each
-      'Bridal Package': FaBridalPackage,
+      'Bridal Package': FaHandHoldingGift,
       'Wedding Package': FaGift,
       'Engagement Package': FaHandHoldingHeart,
       'Reception Package': FaCrown,
@@ -174,7 +165,7 @@ export default function ServiceCard({ service, index }) {
     }
     
     // Default icon
-    return FaBeauty;
+    return FaStar;
   };
 
   const formatDuration = (minutes) => {
